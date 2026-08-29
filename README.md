@@ -2,6 +2,10 @@
 
 A full-stack web application that helps users participate in fitness challenges, track their progress, monitor fitness data, and interact with trainers. The platform also provides trainer management and administrative moderation features.
 
+## Live Demo
+
+[Open the deployed application](https://personal-fitness-challenge.onrender.com/)
+
 ## Overview
 
 The Personal Fitness Challenge Web Platform was developed to provide a centralized platform for users, fitness trainers, and administrators.
