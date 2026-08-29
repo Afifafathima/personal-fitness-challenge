@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainer Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Dashboard</li>
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Challenges</li>
+      <li onclick="goTo('trainers')" class="bg-emerald-500 p-2 rounded cursor-pointer">Trainers</li>
+      <li onclick="goTo('calories')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Calories</li>
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Leaderboard</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <div class="bg-white rounded-xl shadow max-w-3xl mx-auto p-6 text-center">
+
+        <!-- IMAGE -->
+        <img id="img" class="w-32 h-32 mx-auto rounded-full object-cover mb-4">
+
+        <!-- INFO -->
+        <h2 id="name" class="text-2xl font-bold mb-2"></h2>
+        <p id="role" class="text-gray-500 mb-2"></p>
+        <p id="rating" class="text-yellow-500 mb-4"></p>
+
+        <p id="desc" class="text-gray-600 mb-4"></p>
+
+        <!-- EXTRA INFO -->
+        <p id="experience" class="text-sm text-gray-500 mb-6"></p>
+
+        <!-- CHALLENGES -->
+        <h3 class="text-lg font-semibold mb-3">Challenges by Trainer</h3>
+
+        <div id="challengeList" class="space-y-3"></div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+
+    function goTo(page){
+      window.location.href = page + ".html";
+    }
+
+    function openChallenge(id){
+      window.location.href = "challenge-detail.html?id=" + id;
+    }
+
+    const trainers = {
+
+      john: {
+        name: "John Fitness",
+        role: "Strength Trainer",
+        rating: "⭐⭐⭐⭐⭐",
+        img: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=400&auto=format&fit=crop",
+        desc: "Expert in strength training and muscle building.",
+        experience: "Experience: 10+ years",
+        challenges: ["abs", "fullbody"]
+      },
+
+      emma: {
+        name: "Emma Yoga",
+        role: "Yoga Instructor",
+        rating: "⭐⭐⭐⭐",
+        img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop",
+        desc: "Specializes in flexibility and mindfulness.",
+        experience: "Experience: 8 years",
+        challenges: ["yoga"]
+      },
+
+      alex: {
+        name: "Alex Cardio",
+        role: "Cardio Expert",
+        rating: "⭐⭐⭐⭐⭐",
+        img: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=400&auto=format&fit=crop",
+        desc: "Focuses on endurance and fat burning workouts.",
+        experience: "Experience: 9 years",
+        challenges: ["cardio"]
+      }
+
+    };
+
+    const challengeNames = {
+      abs: "Abs Challenge",
+      fullbody: "Full Body Workout",
+      yoga: "Yoga Flexibility",
+      cardio: "Cardio Burn"
+    };
+
+    const id = new URLSearchParams(window.location.search).get("id");
+    const data = trainers[id];
+
+    if (data) {
+      name.innerText = data.name;
+      role.innerText = data.role;
+      rating.innerText = data.rating;
+      img.src = data.img;
+      desc.innerText = data.desc;
+      experience.innerText = data.experience;
+
+      const container = document.getElementById("challengeList");
+
+      data.challenges.forEach(ch => {
+        const div = document.createElement("div");
+        div.innerText = challengeNames[ch];
+        div.className = "p-3 bg-gray-100 rounded cursor-pointer hover:bg-gray-200";
+        div.onclick = () => openChallenge(ch);
+        container.appendChild(div);
+      });
+    }
+
+  </script>
+
+</body>
+</html>

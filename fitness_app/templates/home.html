@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Personal Fitness Challenge Web Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 scroll-smooth">
+
+  <!-- HEADER -->
+  <header class="bg-gray-900 text-white px-8 py-4 flex items-center justify-between fixed w-full top-0 z-50">
+
+    <!-- LEFT -->
+    <div class="flex items-center gap-3">
+
+      <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+
+        <span class="text-white text-lg font-bold">
+          💪
+        </span>
+
+      </div>
+
+      <h1 class="text-lg font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+
+    </div>
+
+    <!-- CENTER -->
+    <nav class="flex gap-8 absolute left-1/2 transform -translate-x-1/2">
+
+      <a href="#home"
+      class="hover:text-emerald-400">
+
+        Home
+
+      </a>
+
+      <a href="#challenges"
+      class="hover:text-emerald-400">
+
+        Challenges
+
+      </a>
+
+      <a href="#about"
+      class="hover:text-emerald-400">
+
+        About
+
+      </a>
+
+    </nav>
+
+    <!-- RIGHT -->
+    <div class="flex gap-4">
+
+      <a href="/login/"
+      class="px-4 py-1 border border-gray-500 rounded hover:bg-gray-800">
+
+        Login
+
+      </a>
+
+      <a href="/signup1/"
+      class="px-4 py-1 bg-emerald-500 rounded hover:bg-emerald-600">
+
+        Sign Up
+
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- SPACING -->
+  <div class="h-20"></div>
+
+  <!-- HERO -->
+  <section id="home"
+  class="mx-10 mt-6 bg-white shadow rounded-xl p-10 flex justify-between items-center">
+
+    <div class="max-w-lg">
+
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">
+
+        Transform Your Fitness Journey 💪
+
+      </h2>
+
+      <p class="text-gray-600 mb-4">
+
+        Join structured fitness challenges,
+        track your daily progress,
+        and stay consistent with expert guidance.
+
+      </p>
+
+      <a href="/signup1/"
+      class="bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600">
+
+        Get Started
+
+      </a>
+
+    </div>
+
+    <img
+      src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74"
+      alt="fitness"
+      class="w-64 h-40 object-cover rounded-lg shadow"
+    >
+
+  </section>
+
+  <!-- CHALLENGES -->
+  <section id="challenges"
+  class="mx-10 mt-10">
+
+    <h3 class="text-xl font-semibold mb-6">
+      Popular Challenges
+    </h3>
+
+    <!-- REALTIME CHALLENGES -->
+    <div id="challengeContainer"
+    class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+
+      <p class="text-gray-500">
+        Loading challenges...
+      </p>
+
+    </div>
+
+    <!-- BUTTON -->
+    <div class="text-center mt-8">
+
+      <a href="/signup1/"
+      class="bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600">
+
+        View More Challenges
+
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about"
+  class="mx-10 mt-10 bg-white p-8 rounded-xl shadow">
+
+    <h3 class="text-lg font-semibold mb-3">
+      About Us
+    </h3>
+
+    <p class="text-gray-600 mb-4">
+
+      Personal Fitness Challenge Web Platform
+      helps users build healthy habits through
+      structured fitness programs.
+
+    </p>
+
+    <p class="text-gray-600 mb-4">
+
+      Track progress, join challenges,
+      and stay motivated with leaderboards.
+
+    </p>
+
+    <p class="text-gray-600">
+
+      Whether your goal is weight loss,
+      muscle gain, or staying active —
+      we support your journey.
+
+    </p>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-10 bg-gray-900 text-white text-center py-4">
+
+    <p class="text-sm">
+      © 2026 Personal Fitness Challenge Web Platform
+    </p>
+
+  </footer>
+
+<script>
+
+async function loadChallenges(){
+
+  const container =
+    document.getElementById(
+      "challengeContainer"
+    );
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/public-challenges/"
+      );
+
+    const data =
+      await response.json();
+
+    container.innerHTML = "";
+
+    if(data.length === 0){
+
+      container.innerHTML = `
+        <p class="text-gray-500">
+          No challenges available
+        </p>
+      `;
+
+      return;
+    }
+
+    data.forEach(ch => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "bg-white p-4 rounded-xl shadow hover:shadow-lg transition cursor-pointer";
+
+      // CLICK -> SIGNUP
+      card.onclick = () => {
+
+        window.location.href =
+          "/signup1/";
+      };
+
+      card.innerHTML = `
+
+        <img src="${ch.image}"
+        class="h-24 w-full object-cover rounded mb-3">
+
+        <p class="font-medium">
+          ${ch.name}
+        </p>
+
+        <p class="text-sm text-gray-500">
+          ${ch.days}
+        </p>
+
+        <p class="text-xs text-emerald-500 mt-2">
+          ${ch.category}
+        </p>
+
+        <p class="text-xs text-gray-400 mt-1">
+          Trainer: ${ch.trainer}
+        </p>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch(error){
+
+    container.innerHTML = `
+      <p class="text-red-500">
+        Failed to load challenges
+      </p>
+    `;
+  }
+}
+
+loadChallenges();
+
+</script>
+
+</body>
+</html>

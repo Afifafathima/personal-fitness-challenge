@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainer Leaderboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm font-semibold">Personal Fitness Challenge Web Platform</h1>
+    </div>
+
+    <div class="flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer">Profile</span>
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Challenges
+      </li>
+
+      <li onclick="goTo('create-challenge')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Create Challenge
+      </li>
+
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Leaderboard
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">User Leaderboard</h2>
+
+      <div class="bg-white rounded-xl shadow overflow-hidden">
+
+        <table class="w-full text-left">
+          <thead class="bg-gray-200 text-gray-700 text-sm">
+            <tr>
+              <th class="p-4">Rank</th>
+              <th class="p-4">User</th>
+              <th class="p-4">Points</th>
+            </tr>
+          </thead>
+
+          <tbody id="tbody" class="text-sm text-gray-600"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+
+    function goTo(page){
+      window.location.href = page + ".html";
+    }
+
+    const users = [
+      {name:"Aarav", points:950},
+      {name:"Meera", points:900},
+      {name:"Rohan", points:850},
+      {name:"Ananya", points:820}
+    ];
+
+    function load(){
+      const tbody = document.getElementById("tbody");
+
+      users.sort((a,b)=>b.points-a.points);
+
+      users.forEach((u,i)=>{
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td class="p-4">#${i+1}</td>
+          <td class="p-4">${u.name}</td>
+          <td class="p-4">${u.points}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    load();
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="font-semibold text-sm md:text-base">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer hover:text-emerald-400">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer hover:text-emerald-400">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">Dashboard</li>
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Challenges</li>
+      <li onclick="goTo('trainers')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Trainers</li>
+      <li onclick="goTo('calories')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Calories</li>
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Leaderboard</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <!-- STATS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">🔥 Streak</p>
+          <h3 class="text-2xl font-bold mt-2">5 Days</h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">🏆 Rank</p>
+          <h3 class="text-2xl font-bold mt-2">#12</h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">🎯 Goal</p>
+          <h3 class="text-2xl font-bold mt-2">Weight Loss</h3>
+        </div>
+      </div>
+
+      <!-- GRAPHS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="font-semibold mb-4">Challenge Progress</h3>
+          <canvas id="progressChart"></canvas>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="font-semibold mb-4">Weight Tracking</h3>
+          <canvas id="weightChart"></canvas>
+        </div>
+
+      </div>
+
+      <!-- CALORIES -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-semibold">🔥 Calories Consumed</h3>
+
+          <select id="filter" onchange="updateCalories()" class="border p-2 rounded">
+            <option value="today">Today</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+          </select>
+        </div>
+
+        <p id="caloriesValue" class="text-2xl font-bold text-emerald-500">
+          1800 kcal
+        </p>
+      </div>
+
+      <!-- JOINED CHALLENGES -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <h3 class="font-semibold mb-3">Your Challenges</h3>
+        <ul id="challengeList" class="text-emerald-500 font-bold space-y-2"></ul>
+      </div>
+
+      <!-- ACTIVITY -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold mb-4">Recent Activity</h3>
+        <ul class="space-y-2 text-gray-600">
+          <li>✔ Completed Day 3 of Challenge</li>
+          <li>✔ Logged 2000 calories</li>
+          <li>✔ Joined Yoga Challenge</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white w-full">
+    <div class="max-w-7xl mx-auto px-6 py-6 text-center text-gray-400 text-xs">
+      © 2026 Personal Fitness Challenge Web Platform
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+
+    function goTo(page){
+      window.location.href = page + ".html";
+    }
+
+    // CALORIES DATA
+    const caloriesData = {
+      today: 1800,
+      week: 12500,
+      month: 52000
+    };
+
+    function updateCalories(){
+      const val = document.getElementById("filter").value;
+      document.getElementById("caloriesValue").innerText =
+        caloriesData[val] + " kcal";
+    }
+
+    // CHARTS
+    new Chart(document.getElementById("progressChart"), {
+      type: "line",
+      data: {
+        labels: ["Day1","Day2","Day3","Day4","Day5"],
+        datasets: [{
+          label: "Progress %",
+          data: [20,40,60,75,90],
+          borderWidth: 2
+        }]
+      }
+    });
+
+    new Chart(document.getElementById("weightChart"), {
+      type: "line",
+      data: {
+        labels: ["Week1","Week2","Week3","Week4"],
+        datasets: [{
+          label: "Weight (kg)",
+          data: [72,70,69,67],
+          borderWidth: 2
+        }]
+      }
+    });
+
+    // JOINED CHALLENGES
+    const challengeNames = {
+      abs: "Abs Challenge",
+      fullbody: "Full Body Workout",
+      yoga: "Yoga Flexibility",
+      cardio: "Cardio Burn"
+    };
+
+    function loadDashboardChallenges(){
+      const joined = JSON.parse(localStorage.getItem("joinedChallenges")) || [];
+      const list = document.getElementById("challengeList");
+
+      list.innerHTML = "";
+
+      if(joined.length === 0){
+        list.innerHTML = "<li>No challenges joined</li>";
+        return;
+      }
+
+      joined.forEach(id => {
+        const li = document.createElement("li");
+        li.innerText = challengeNames[id];
+        list.appendChild(li);
+      });
+    }
+
+    loadDashboardChallenges();
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - Step 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center h-screen">
+
+  <!-- CONTAINER -->
+  <div class="bg-white shadow-xl rounded-xl w-[500px] p-8 text-center">
+
+    <!-- LOGO -->
+    <div class="flex items-center gap-3 mb-6 justify-center">
+      <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+        <span class="text-white font-bold">💪</span>
+      </div>
+      <h1 class="text-lg font-semibold">FitChallenge</h1>
+    </div>
+
+    <!-- STEP -->
+    <p class="text-sm text-gray-500 mb-2">Step 2 of 3</p>
+
+    <!-- TITLE -->
+    <h2 class="text-xl font-bold mb-6">Choose Your Role</h2>
+
+    <!-- ROLE CARDS -->
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- USER CARD -->
+      <div onclick="selectRole('user')"
+        class="cursor-pointer border rounded-xl p-6 hover:border-emerald-500 hover:shadow-md transition">
+
+        <div class="text-3xl mb-3">👤</div>
+        <h3 class="font-semibold text-lg">User</h3>
+        <p class="text-sm text-gray-500 mt-2">
+          Join challenges, track progress, and improve your fitness.
+        </p>
+
+      </div>
+
+      <!-- TRAINER CARD -->
+      <div onclick="selectRole('trainer')"
+        class="cursor-pointer border rounded-xl p-6 hover:border-emerald-500 hover:shadow-md transition">
+
+        <div class="text-3xl mb-3">🏋️</div>
+        <h3 class="font-semibold text-lg">Trainer</h3>
+        <p class="text-sm text-gray-500 mt-2">
+          Create challenges, guide users, and manage fitness programs.
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="mt-6">
+      <a href="/signup1/" class="text-gray-500 text-sm hover:text-black">
+        ← Back
+      </a>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    function selectRole(role) {
+
+      sessionStorage.setItem("role", role);
+
+      if (role === "user") {
+        window.location.href = "/signup-user/";
+      } else {
+        window.location.href = "/signup-trainer/";
+      }
+    }
+  </script>
+
+</body>
+</html>

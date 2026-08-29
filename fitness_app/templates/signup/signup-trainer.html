@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - Trainer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white shadow-xl rounded-xl w-[500px] p-8">
+
+    <div class="flex items-center gap-3 mb-6 justify-center">
+
+      <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+        <span class="text-white font-bold">
+          💪
+        </span>
+      </div>
+
+      <h1 class="text-lg font-semibold">
+        FitChallenge
+      </h1>
+
+    </div>
+
+    <p class="text-sm text-gray-500 text-center mb-2">
+      Step 3 of 3
+    </p>
+
+    <h2 class="text-xl font-bold text-center mb-6">
+      Trainer Profile Setup
+    </h2>
+
+    <div class="space-y-4">
+
+      <!-- EXPERIENCE -->
+      <div>
+
+        <label class="text-sm font-medium">
+          Years of Experience
+        </label>
+
+        <input
+        id="experienceInput"
+        type="number"
+        class="w-full p-3 border rounded-lg">
+
+      </div>
+
+      <!-- SPECIALIZATION -->
+      <div>
+
+        <label class="text-sm font-medium">
+          Specialization
+        </label>
+
+        <select
+        id="specializationInput"
+        class="w-full p-3 border rounded-lg">
+
+          <option value="">
+            Select Specialization
+          </option>
+
+          <option value="Weight Loss">
+            Weight Loss
+          </option>
+
+          <option value="Muscle Building">
+            Muscle Building
+          </option>
+
+          <option value="Yoga">
+            Yoga
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- CERTIFICATE -->
+      <div>
+
+        <label class="text-sm font-medium">
+          Certificate URL
+        </label>
+
+        <input
+        id="certificateInput"
+        type="text"
+        placeholder="Paste certificate image URL"
+        class="w-full p-3 border rounded-lg">
+
+      </div>
+
+      <!-- BIO -->
+      <div>
+
+        <label class="text-sm font-medium">
+          Short Bio
+        </label>
+
+        <textarea rows="3"
+        class="w-full p-3 border rounded-lg">
+        </textarea>
+
+      </div>
+
+    </div>
+
+    <!-- FORM -->
+    <form method="POST" action="/signup/">
+
+      {% csrf_token %}
+
+      <!-- BASIC -->
+      <input type="hidden"
+      name="name"
+      id="name">
+
+      <input type="hidden"
+      name="email"
+      id="email">
+
+      <input type="hidden"
+      name="password"
+      id="password">
+
+      <input type="hidden"
+      name="role"
+      value="trainer">
+
+      <!-- TRAINER -->
+      <input type="hidden"
+      name="certificate"
+      id="certificate">
+
+      <input type="hidden"
+      name="specialization"
+      id="specialization">
+
+      <input type="hidden"
+      name="experience"
+      id="experience">
+
+      <!-- BUTTON -->
+      <button type="submit"
+      class="w-full mt-6 bg-emerald-500 text-white py-3 rounded-lg">
+
+        Submit & Register ✅
+
+      </button>
+
+    </form>
+
+    <p class="text-center text-sm text-gray-500 mt-4">
+
+      <a href="/signup2/"
+      class="hover:text-black">
+
+        ← Back
+
+      </a>
+
+    </p>
+
+  </div>
+
+<script>
+
+// SESSION DATA
+const name =
+  sessionStorage.getItem("name");
+
+const email =
+  sessionStorage.getItem("email");
+
+const password =
+  sessionStorage.getItem("password");
+
+// EXPIRED SESSION
+if(!name || !email || !password){
+
+  alert(
+    "Session expired. Please signup again."
+  );
+
+  window.location.href =
+    "/signup1/";
+}
+
+// SET BASIC
+document.getElementById(
+  "name"
+).value = name;
+
+document.getElementById(
+  "email"
+).value = email;
+
+document.getElementById(
+  "password"
+).value = password;
+
+// CERTIFICATE
+document.getElementById(
+  "certificateInput"
+).addEventListener("input", function(){
+
+  document.getElementById(
+    "certificate"
+  ).value = this.value;
+});
+
+// SPECIALIZATION
+document.getElementById(
+  "specializationInput"
+).addEventListener("change", function(){
+
+  document.getElementById(
+    "specialization"
+  ).value = this.value;
+});
+
+// EXPERIENCE
+document.getElementById(
+  "experienceInput"
+).addEventListener("input", function(){
+
+  document.getElementById(
+    "experience"
+  ).value = this.value;
+});
+
+// CLEAR SESSION
+document.querySelector(
+  "form"
+).addEventListener("submit", () => {
+
+  sessionStorage.clear();
+});
+
+</script>
+
+</body>
+</html>

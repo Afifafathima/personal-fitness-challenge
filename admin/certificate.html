@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainer Certificates</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Dashboard</li>
+      <li onclick="goTo('manage-challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Manage Challenges</li>
+      <li onclick="goTo('reports')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Reports</li>
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">Certificate</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-6 mt-16 md:ml-52">
+
+      <h2 class="text-2xl font-bold mb-6">Trainer Certificate Verification</h2>
+
+      <div id="trainerContainer" class="space-y-4"></div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+
+    function goTo(page){
+      window.location.href = page + ".html";
+    }
+
+    function loadTrainers(){
+
+      let trainers = JSON.parse(localStorage.getItem("trainers")) || [];
+      const container = document.getElementById("trainerContainer");
+
+      container.innerHTML = "";
+
+      const pending = trainers.filter(t => t.status === "pending");
+
+      if(pending.length === 0){
+        container.innerHTML = "<p class='text-gray-500'>No pending trainer requests</p>";
+        return;
+      }
+
+      pending.forEach((t, index) => {
+
+        const div = document.createElement("div");
+
+        div.className = "bg-white p-4 rounded-xl shadow";
+
+        div.innerHTML = `
+          <div class="flex gap-4 items-center">
+
+            <img src="${t.certificate}" class="w-24 h-24 object-cover rounded">
+
+            <div class="flex-1">
+              <h3 class="font-semibold">${t.name}</h3>
+              <p class="text-sm text-gray-500">Certificate Uploaded</p>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <button onclick="approve(${index})"
+              class="bg-green-500 text-white px-3 py-1 rounded text-sm">
+                Accept
+              </button>
+
+              <button onclick="reject(${index})"
+              class="bg-red-500 text-white px-3 py-1 rounded text-sm">
+                Reject
+              </button>
+            </div>
+
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function approve(index){
+
+      let trainers = JSON.parse(localStorage.getItem("trainers")) || [];
+
+      const pending = trainers.filter(t => t.status === "pending");
+      const selected = pending[index];
+
+      const actualIndex = trainers.findIndex(t => t.id === selected.id);
+
+      trainers[actualIndex].status = "approved";
+
+      localStorage.setItem("trainers", JSON.stringify(trainers));
+
+      alert("Trainer approved");
+      loadTrainers();
+    }
+
+    function reject(index){
+
+      let trainers = JSON.parse(localStorage.getItem("trainers")) || [];
+
+      const pending = trainers.filter(t => t.status === "pending");
+      const selected = pending[index];
+
+      trainers = trainers.filter(t => t.id !== selected.id);
+
+      localStorage.setItem("trainers", JSON.stringify(trainers));
+
+      alert("Trainer rejected");
+      loadTrainers();
+    }
+
+    loadTrainers();
+
+  </script>
+
+</body>
+</html>

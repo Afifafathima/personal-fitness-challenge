@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="font-semibold text-sm md:text-base">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer hover:text-emerald-400">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer hover:text-emerald-400">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Dashboard</li>
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Challenges</li>
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">Trainers</li>
+      <li onclick="goTo('calories')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Calories</li>
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Leaderboard</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">Trainers</h2>
+
+      <!-- CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- TRAINER 1 -->
+        <div onclick="openTrainer('john')" class="bg-white rounded-xl shadow p-4 cursor-pointer text-center">
+          <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=400&auto=format&fit=crop" 
+               class="w-24 h-24 mx-auto rounded-full mb-4 object-cover">
+          <h3 class="font-semibold">John Fitness</h3>
+          <p class="text-sm text-gray-500">Strength Trainer</p>
+          <p class="text-yellow-500 mt-2">⭐⭐⭐⭐⭐</p>
+        </div>
+
+        <!-- TRAINER 2 -->
+        <div onclick="openTrainer('emma')" class="bg-white rounded-xl shadow p-4 cursor-pointer text-center">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" 
+               class="w-24 h-24 mx-auto rounded-full mb-4 object-cover">
+          <h3 class="font-semibold">Emma Yoga</h3>
+          <p class="text-sm text-gray-500">Yoga Instructor</p>
+          <p class="text-yellow-500 mt-2">⭐⭐⭐⭐</p>
+        </div>
+
+        <!-- TRAINER 3 -->
+        <div onclick="openTrainer('alex')" class="bg-white rounded-xl shadow p-4 cursor-pointer text-center">
+          <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=400&auto=format&fit=crop" 
+               class="w-24 h-24 mx-auto rounded-full mb-4 object-cover">
+          <h3 class="font-semibold">Alex Cardio</h3>
+          <p class="text-sm text-gray-500">Cardio Expert</p>
+          <p class="text-yellow-500 mt-2">⭐⭐⭐⭐⭐</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white w-full">
+    <div class="text-center py-4 text-xs text-gray-400">
+      © 2026 Personal Fitness Challenge Web Platform
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+<script>
+
+function goTo(page){
+
+  window.location.href =
+    "/user/" + page + "/";
+}
+
+function openTrainer(id){
+
+  window.location.href =
+    "/user/trainer-detail/?id=" + id;
+}
+
+async function loadTrainers(){
+
+  const response =
+    await fetch(
+      "/api/approved-trainers/"
+    );
+
+  const trainers =
+    await response.json();
+
+  const container =
+    document.querySelector(
+      ".grid"
+    );
+
+  container.innerHTML = "";
+
+  trainers.forEach(trainer => {
+
+    container.innerHTML += `
+
+      <div
+      onclick="openTrainer(${trainer.id})"
+      class="bg-white rounded-xl shadow p-4 cursor-pointer text-center">
+
+        <img
+        src="${trainer.image}"
+        class="w-24 h-24 mx-auto rounded-full mb-4 object-cover">
+
+        <h3 class="font-semibold">
+          ${trainer.name}
+        </h3>
+
+        <p class="text-sm text-gray-500">
+          ${trainer.specialization || "Fitness Trainer"}
+        </p>
+
+        <p class="text-sm text-emerald-500 mt-2">
+          ${trainer.challenge_count} Challenges
+        </p>
+
+      </div>
+    `;
+  });
+}
+
+loadTrainers();
+
+</script>
+
+</body>
+</html>

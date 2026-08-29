@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer">Help</span>
+      <span class="cursor-pointer text-emerald-400">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Dashboard</li>
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Challenges</li>
+      <li onclick="goTo('trainers')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Trainers</li>
+      <li onclick="goTo('calories')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Calories</li>
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Leaderboard</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">My Profile</h2>
+
+      <div class="bg-white p-6 rounded-xl shadow max-w-lg">
+
+        <!-- NAME -->
+        <div class="mb-4">
+          <label class="text-sm text-gray-500">Name</label>
+          <input id="name" disabled class="w-full border p-2 rounded mt-1 bg-gray-100">
+        </div>
+
+        <!-- EMAIL -->
+        <div class="mb-4">
+          <label class="text-sm text-gray-500">Email</label>
+          <input id="email" disabled class="w-full border p-2 rounded mt-1 bg-gray-100">
+        </div>
+
+        <!-- GOAL -->
+        <div class="mb-4">
+          <label class="text-sm text-gray-500">Fitness Goal</label>
+          <select id="goal" disabled class="w-full border p-2 rounded mt-1 bg-gray-100">
+            <option>Weight Loss</option>
+            <option>Muscle Gain</option>
+            <option>Maintain Fitness</option>
+          </select>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="flex gap-4">
+
+          <button id="editBtn" onclick="enableEdit()" 
+          class="bg-gray-500 text-white px-4 py-2 rounded">
+            Edit
+          </button>
+
+          <button id="saveBtn" onclick="saveProfile()" 
+          class="bg-emerald-500 text-white px-4 py-2 rounded hidden">
+            Save
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+
+    function goTo(page){
+      window.location.href = page + ".html";
+    }
+
+    const defaultProfile = {
+      name: "Afifa Fathima",
+      email: "afifa@email.com",
+      goal: "Weight Loss"
+    };
+
+    function enableEdit(){
+      document.getElementById("name").disabled = false;
+      document.getElementById("email").disabled = false;
+      document.getElementById("goal").disabled = false;
+
+      document.getElementById("name").classList.remove("bg-gray-100");
+      document.getElementById("email").classList.remove("bg-gray-100");
+      document.getElementById("goal").classList.remove("bg-gray-100");
+
+      document.getElementById("editBtn").classList.add("hidden");
+      document.getElementById("saveBtn").classList.remove("hidden");
+    }
+
+    function saveProfile(){
+      const profile = {
+        name: name.value,
+        email: email.value,
+        goal: goal.value
+      };
+
+      localStorage.setItem("profile", JSON.stringify(profile));
+
+      location.reload();
+    }
+
+    function loadProfile(){
+      let data = JSON.parse(localStorage.getItem("profile"));
+
+      if(!data){
+        data = defaultProfile;
+        localStorage.setItem("profile", JSON.stringify(data));
+      }
+
+      name.value = data.name;
+      email.value = data.email;
+      goal.value = data.goal;
+    }
+
+    loadProfile();
+
+  </script>
+
+</body>
+</html>

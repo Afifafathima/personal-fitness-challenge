@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Challenge Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+        💪
+      </div>
+
+      <h1 class="font-semibold text-sm md:text-base">
+        Personal Fitness Challenge Web Platform
+      </h1>
+
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+
+      <span onclick="goTo('help')"
+      class="cursor-pointer">
+        Help
+      </span>
+
+      <span onclick="goTo('profile')"
+      class="cursor-pointer">
+        Profile
+      </span>
+
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li onclick="goTo('dashboard')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('challenges')"
+      class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Challenges
+      </li>
+
+      <li onclick="goTo('trainers')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Trainers
+      </li>
+
+      <li onclick="goTo('calories')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Calories
+      </li>
+
+      <li onclick="goTo('leaderboard')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Leaderboard
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+
+    <div class="p-6 mt-16 md:ml-52">
+
+      <div class="bg-white rounded-xl shadow max-w-2xl mx-auto overflow-hidden">
+
+        <img id="img"
+        class="w-full h-60 object-cover">
+
+        <div class="p-6">
+
+          <h2 id="title"
+          class="text-2xl font-bold mb-2">
+          </h2>
+
+          <p id="days"
+          class="text-gray-500 mb-4">
+          </p>
+
+          <p id="category"
+          class="text-sm text-blue-500 mb-2">
+          </p>
+
+          <p id="trainer"
+          class="text-sm text-emerald-500 mb-2">
+          </p>
+
+          <p id="joinedUsers"
+          class="text-sm text-gray-500 mb-4">
+          </p>
+
+          <p id="desc"
+          class="text-gray-600 mb-6">
+          </p>
+
+          <!-- JOIN -->
+          <button
+          id="joinBtn"
+          onclick="toggleJoin()"
+          class="bg-emerald-500 text-white px-6 py-2 rounded">
+
+            Join Challenge
+
+          </button>
+
+          <!-- REPORT -->
+          <button
+          onclick="reportChallenge()"
+          class="ml-4 bg-red-500 text-white px-4 py-2 rounded">
+
+            Report
+
+          </button>
+
+
+      <!-- PROGRESS -->
+<div
+id="progressSection"
+class="hidden mt-6">
+
+  <div class="flex justify-between mb-2">
+
+    <span class="text-sm font-medium">
+      Progress
+    </span>
+
+    <span
+    id="progressText"
+    class="text-sm text-emerald-500">
+
+      0%
+
+    </span>
+
+  </div>
+
+  <div class="w-full bg-gray-200 rounded-full h-4 mb-4">
+
+    <div
+    id="progressBar"
+    class="bg-emerald-500 h-4 rounded-full"
+    style="width:0%">
+
+    </div>
+
+  </div>
+
+  <div class="flex gap-2">
+
+    <input
+    id="progressInput"
+    type="number"
+    min="0"
+    max="100"
+    placeholder="Enter progress %"
+    class="border p-2 rounded w-40">
+
+    <button
+    onclick="updateProgress()"
+    class="bg-emerald-500 text-white px-4 py-2 rounded">
+
+      Update
+
+    </button>
+
+  </div>
+
+</div>
+
+          <!-- COMPLETE -->
+          <button
+          id="completeBtn"
+          onclick="completeChallenge()"
+          class="ml-4 bg-blue-500 text-white px-4 py-2 rounded hidden">
+
+            Complete Today
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+
+    © 2026 Personal Fitness Challenge Web Platform
+
+  </footer>
+
+<script>
+
+function goTo(page){
+
+  window.location.href =
+    "/user/" + page + "/";
+}
+
+const id =
+  new URLSearchParams(
+    window.location.search
+  ).get("id");
+
+let joined = false;
+
+// LOAD CHALLENGE
+async function loadChallenge(){
+
+  const response =
+    await fetch(
+      `/api/challenge/${id}/`
+    );
+
+  const data =
+    await response.json();
+
+  if(data.error){
+
+    document.getElementById(
+      "title"
+    ).innerText =
+      "Challenge not found";
+
+    return;
+  }
+
+  document.getElementById(
+    "title"
+  ).innerText =
+    data.name;
+
+  document.getElementById(
+    "days"
+  ).innerText =
+    data.days;
+
+  document.getElementById(
+    "category"
+  ).innerText =
+    "Category: " + data.category;
+
+  document.getElementById(
+    "trainer"
+  ).innerText =
+    "Trainer: " + data.trainer;
+
+  document.getElementById(
+    "joinedUsers"
+  ).innerText =
+    "Joined Users: " + data.joined_users;
+
+  document.getElementById(
+    "img"
+  ).src =
+    data.image;
+
+  document.getElementById(
+    "desc"
+  ).innerText =
+    data.description;
+
+  joined = data.joined;
+
+  updateButton();
+
+  toggleCompleteButton();
+
+  loadProgress();
+}
+
+// LOAD PROGRESS
+async function loadProgress(){
+
+  const section =
+    document.getElementById(
+      "progressSection"
+    );
+
+  if(!joined){
+
+    section.classList.add(
+      "hidden"
+    );
+
+    return;
+  }
+
+  section.classList.remove(
+    "hidden"
+  );
+
+  try{
+
+    const response =
+      await fetch(
+        `/api/challenge-progress/${id}/`
+      );
+
+    const data =
+      await response.json();
+
+    const progress =
+      parseInt(
+        data.progress || 0
+      );
+
+    const bar =
+      document.getElementById(
+        "progressBar"
+      );
+
+    // FORCE REFRESH
+    bar.style.width = "0%";
+
+    setTimeout(() => {
+
+      bar.style.width =
+        progress + "%";
+
+    }, 50);
+
+    document.getElementById(
+      "progressText"
+    ).innerText =
+      progress + "%";
+
+  } catch(error){
+
+    console.log(error);
+  }
+}
+
+// UPDATE PROGRESS
+async function updateProgress(){
+
+  const progress =
+    parseInt(
+      document.getElementById(
+        "progressInput"
+      ).value
+    );
+
+  if(isNaN(progress)){
+
+    alert(
+      "Enter progress"
+    );
+
+    return;
+  }
+
+  if(progress < 0 || progress > 100){
+
+    alert(
+      "Enter value between 0 and 100"
+    );
+
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "progress",
+    progress
+  );
+
+  try{
+
+    const response =
+      await fetch(
+        `/api/update-progress/${id}/`,
+        {
+
+          method: "POST",
+
+          body: formData,
+
+          headers: {
+            "X-CSRFToken":
+            getCookie("csrftoken")
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+    console.log(data);
+
+    if(data.success){
+
+      // UPDATE BAR
+      const bar =
+        document.getElementById(
+          "progressBar"
+        );
+
+      bar.style.width = "0%";
+
+      setTimeout(() => {
+
+        bar.style.width =
+          progress + "%";
+
+      }, 50);
+
+      // UPDATE TEXT
+      document.getElementById(
+        "progressText"
+      ).innerText =
+        progress + "%";
+
+      // CLEAR INPUT
+      document.getElementById(
+        "progressInput"
+      ).value = "";
+
+      if(progress == 100){
+
+        alert(
+          "Challenge completed 🎉"
+        );
+      }
+
+    } else {
+
+      alert(
+        data.error ||
+        "Update failed"
+      );
+    }
+
+  } catch(error){
+
+    console.log(error);
+
+    alert(
+      "Something went wrong"
+    );
+  }
+}
+
+// JOIN CHALLENGE
+async function toggleJoin(){
+
+  const response =
+    await fetch(
+      `/api/join-challenge/${id}/`
+    );
+
+  const data =
+    await response.json();
+
+  if(data.error){
+
+    alert(data.error);
+
+    return;
+  }
+
+  joined = data.joined;
+
+  updateButton();
+
+  toggleCompleteButton();
+
+  loadProgress();
+}
+
+// UPDATE JOIN BUTTON
+function updateButton(){
+
+  const btn =
+    document.getElementById(
+      "joinBtn"
+    );
+
+  if(joined){
+
+    btn.innerText =
+      "Joined";
+
+    btn.classList.remove(
+      "bg-emerald-500"
+    );
+
+    btn.classList.add(
+      "bg-gray-500"
+    );
+
+  } else {
+
+    btn.innerText =
+      "Join Challenge";
+
+    btn.classList.remove(
+      "bg-gray-500"
+    );
+
+    btn.classList.add(
+      "bg-emerald-500"
+    );
+  }
+}
+
+// SHOW COMPLETE BUTTON
+function toggleCompleteButton(){
+
+  const btn =
+    document.getElementById(
+      "completeBtn"
+    );
+
+  if(joined){
+
+    btn.classList.remove(
+      "hidden"
+    );
+
+  } else {
+
+    btn.classList.add(
+      "hidden"
+    );
+  }
+}
+
+// COMPLETE CHALLENGE
+async function completeChallenge(){
+
+  const response =
+    await fetch(
+      `/api/complete-challenge/${id}/`
+    );
+
+  const data =
+    await response.json();
+
+  if(data.error){
+
+    alert(data.error);
+
+    return;
+  }
+
+  if(data.message){
+
+    alert(
+`${data.message}
+
+Current streak:
+${data.streak}`
+    );
+
+    return;
+  }
+
+  alert(
+`Challenge completed today ✅
+
+Current streak:
+${data.streak}
+
+Longest streak:
+${data.longest}`
+  );
+}
+
+// REPORT
+async function reportChallenge(){
+
+  const reason =
+    prompt(
+      "Enter reason for reporting challenge:"
+    );
+
+  if(!reason){
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "reason",
+    reason
+  );
+
+  const response =
+    await fetch(
+      `/api/report-challenge/${id}/`,
+      {
+
+        method: "POST",
+
+        body: formData,
+
+        headers: {
+          "X-CSRFToken":
+          getCookie("csrftoken")
+        }
+      }
+    );
+
+  const data =
+    await response.json();
+
+  if(data.success){
+
+    alert(
+      "Report submitted"
+    );
+
+  } else {
+
+    alert(
+      "Failed to submit report"
+    );
+  }
+}
+
+// CSRF TOKEN
+function getCookie(name){
+
+  let cookieValue = null;
+
+  if(
+    document.cookie &&
+    document.cookie !== ''
+  ){
+
+    const cookies =
+      document.cookie.split(';');
+
+    for(
+      let i = 0;
+      i < cookies.length;
+      i++
+    ){
+
+      const cookie =
+        cookies[i].trim();
+
+      if(
+        cookie.substring(
+          0,
+          name.length + 1
+        ) === (name + '=')
+      ){
+
+        cookieValue =
+          decodeURIComponent(
+            cookie.substring(
+              name.length + 1
+            )
+          );
+
+        break;
+      }
+    }
+  }
+
+  return cookieValue;
+}
+
+loadChallenge();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+        💪
+      </div>
+
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('manage-challenges')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Manage Challenges
+      </li>
+
+      <li onclick="goTo('reports')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Reports
+      </li>
+
+      <li onclick="goTo('certificate')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Certificate
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">
+        Admin Dashboard
+      </h2>
+
+      <!-- STATS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            👤 Total Users
+          </p>
+
+          <h3 id="totalUsers"
+          class="text-2xl font-bold mt-2">
+            0
+          </h3>
+
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            🏋️ Trainers
+          </p>
+
+          <h3 id="totalTrainers"
+          class="text-2xl font-bold mt-2">
+            0
+          </h3>
+
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            📊 Challenges
+          </p>
+
+          <h3 id="totalChallenges"
+          class="text-2xl font-bold mt-2">
+            0
+          </h3>
+
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            🚨 Reports
+          </p>
+
+          <h3 id="totalReports"
+          class="text-2xl font-bold mt-2">
+            0
+          </h3>
+
+        </div>
+
+      </div>
+
+      <!-- SYSTEM OVERVIEW -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+
+        <h3 class="font-semibold mb-4">
+          System Overview
+        </h3>
+
+        <ul class="text-gray-600 space-y-2">
+
+          <li>
+            ✔ Platform running smoothly
+          </li>
+
+          <li>
+            ✔ Backend database connected
+          </li>
+
+          <li>
+            ✔ Real-time challenge sync active
+          </li>
+
+          <li>
+            ✔ Admin controls operational
+          </li>
+
+        </ul>
+
+      </div>
+
+      <!-- TRAINER REQUESTS -->
+      <div class="bg-white p-6 rounded-xl shadow">
+
+        <h3 class="font-semibold mb-4">
+          Pending Trainer Requests
+        </h3>
+
+        <div id="trainerList"
+        class="space-y-4">
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+<script>
+
+function goTo(page){
+  window.location.href =
+    "/admin/" + page + "/";
+}
+
+// APPROVE TRAINER
+async function approve(id){
+
+  const response =
+    await fetch(`/api/approve-trainer/${id}/`);
+
+  const data =
+    await response.json();
+
+  if(data.success){
+
+    alert("Trainer approved");
+
+    loadDashboard();
+
+  } else {
+
+    alert("Failed");
+  }
+}
+
+// REJECT TRAINER
+async function reject(id){
+
+  const response =
+    await fetch(`/api/reject-trainer/${id}/`);
+
+  const data =
+    await response.json();
+
+  if(data.success){
+
+    alert("Trainer rejected");
+
+    loadDashboard();
+
+  } else {
+
+    alert("Failed");
+  }
+}
+
+// LOAD DASHBOARD
+async function loadDashboard(){
+
+  // ADMIN STATS
+  const statsResponse =
+    await fetch("/api/admin-stats/");
+
+  const stats =
+    await statsResponse.json();
+
+  document.getElementById(
+    "totalUsers"
+  ).innerText =
+    stats.users;
+
+  document.getElementById(
+    "totalTrainers"
+  ).innerText =
+    stats.trainers;
+
+  document.getElementById(
+    "totalChallenges"
+  ).innerText =
+    stats.challenges;
+
+  document.getElementById(
+    "totalReports"
+  ).innerText =
+    stats.reports;
+
+  // TRAINER REQUESTS
+  const trainerResponse =
+    await fetch("/api/trainer-requests/");
+
+  const trainerData =
+    await trainerResponse.json();
+
+  const container =
+    document.getElementById(
+      "trainerList"
+    );
+
+  container.innerHTML = "";
+
+  const pending =
+    trainerData.trainers.filter(
+      t => t.status === "pending"
+    );
+
+  if(pending.length === 0){
+
+    container.innerHTML = `
+      <p class="text-gray-500">
+        No pending trainer requests
+      </p>
+    `;
+
+    return;
+  }
+
+  pending.forEach(t => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "flex justify-between items-center bg-gray-100 p-4 rounded-xl";
+
+    div.innerHTML = `
+
+      <div class="flex items-center gap-4">
+
+        <img src="${t.certificate}"
+        class="w-16 h-16 rounded object-cover border">
+
+        <div>
+
+          <h3 class="font-semibold">
+            ${t.name}
+          </h3>
+
+          <p class="text-sm text-yellow-500">
+            Pending Verification
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="flex gap-2">
+
+        <button
+        onclick="approve(${t.id})"
+        class="bg-green-500 text-white px-4 py-2 rounded text-sm">
+
+          Accept
+
+        </button>
+
+        <button
+        onclick="reject(${t.id})"
+        class="bg-red-500 text-white px-4 py-2 rounded text-sm">
+
+          Reject
+
+        </button>
+
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>

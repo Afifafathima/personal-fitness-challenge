@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Challenges</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="font-semibold text-sm md:text-base">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer hover:text-emerald-400">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer hover:text-emerald-400">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Dashboard</li>
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">Challenges</li>
+      <li onclick="goTo('trainers')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Trainers</li>
+      <li onclick="goTo('calories')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Calories</li>
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Leaderboard</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">Challenges</h2>
+
+      <!-- TABS -->
+      <div class="flex gap-4 mb-6">
+        <button onclick="filterChallenges('all', this)" class="tab-btn bg-emerald-500 text-white px-4 py-2 rounded">All</button>
+        <button onclick="filterChallenges('free', this)" class="tab-btn bg-white text-gray-700 px-4 py-2 rounded shadow">Free</button>
+        <button onclick="filterChallenges('paid', this)" class="tab-btn bg-white text-gray-700 px-4 py-2 rounded shadow">Paid</button>
+      </div>
+
+      <!-- CARDS -->
+      <div id="challengeContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white w-full">
+    <div class="max-w-7xl mx-auto px-6 py-6 text-center text-gray-400 text-xs">
+      © 2026 Personal Fitness Challenge Web Platform
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+
+    function goTo(page) {
+      window.location.href = page + ".html";
+    }
+
+    function openChallenge(id) {
+      window.location.href = "challenge-detail.html?id=" + id;
+    }
+
+    // ✅ LOAD FROM allChallenges
+    function getChallenges(){
+      return JSON.parse(localStorage.getItem("allChallenges")) || [];
+    }
+
+    function loadChallenges(){
+      const container = document.getElementById("challengeContainer");
+      const data = getChallenges();
+
+      container.innerHTML = "";
+
+      if(data.length === 0){
+        container.innerHTML = "<p class='text-gray-500'>No challenges available</p>";
+        return;
+      }
+
+      data.forEach((ch, index) => {
+
+        const type = index % 2 === 0 ? "free" : "paid"; // simple tagging
+
+        const div = document.createElement("div");
+
+        div.className = "challenge bg-white rounded-xl shadow overflow-hidden cursor-pointer";
+        div.setAttribute("data-type", type);
+
+        div.onclick = () => openChallenge(ch.id);
+
+        div.innerHTML = `
+          <img src="${ch.img}" class="h-40 w-full object-cover">
+          <div class="p-4">
+            <h3 class="font-semibold">${ch.name}</h3>
+            <p class="text-sm text-gray-500">${ch.days}</p>
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function filterChallenges(type, btn) {
+      const cards = document.querySelectorAll(".challenge");
+      const buttons = document.querySelectorAll(".tab-btn");
+
+      cards.forEach(card => {
+        card.style.display =
+          (type === "all" || card.dataset.type === type) ? "block" : "none";
+      });
+
+      buttons.forEach(b => {
+        b.classList.remove("bg-emerald-500", "text-white");
+        b.classList.add("bg-white", "text-gray-700");
+      });
+
+      btn.classList.remove("bg-white", "text-gray-700");
+      btn.classList.add("bg-emerald-500", "text-white");
+    }
+
+    loadChallenges();
+
+  </script>
+
+</body>
+</html>

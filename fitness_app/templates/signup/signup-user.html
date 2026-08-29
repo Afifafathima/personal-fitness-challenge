@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - User</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white shadow-xl rounded-xl w-[500px] p-8">
+
+    <div class="flex items-center gap-3 mb-6 justify-center">
+      <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+        <span class="text-white font-bold">💪</span>
+      </div>
+      <h1 class="text-lg font-semibold">FitChallenge</h1>
+    </div>
+
+    <p class="text-sm text-gray-500 text-center mb-2">Step 3 of 3</p>
+
+    <h2 class="text-xl font-bold text-center mb-6">Complete Your Profile</h2>
+
+    <div class="space-y-4">
+
+      <div>
+        <label class="text-sm font-medium">Age</label>
+        <input type="number" class="w-full p-3 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Gender</label>
+        <select class="w-full p-3 border rounded-lg">
+          <option>Select Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Height (cm)</label>
+        <input type="number" class="w-full p-3 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Weight (kg)</label>
+        <input type="number" class="w-full p-3 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Fitness Goal</label>
+        <select class="w-full p-3 border rounded-lg">
+          <option>Select Goal</option>
+          <option>Weight Loss</option>
+          <option>Muscle Gain</option>
+          <option>Stay Fit</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Activity Level</label>
+        <select class="w-full p-3 border rounded-lg">
+          <option>Select Level</option>
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- FORM -->
+    <form method="POST" action="/signup/">
+      {% csrf_token %}
+
+      <input type="hidden" name="name" id="name">
+      <input type="hidden" name="email" id="email">
+      <input type="hidden" name="password" id="password">
+      <input type="hidden" name="role" value="user">
+
+      <button type="submit"
+        class="w-full mt-6 bg-emerald-500 text-white py-3 rounded-lg">
+        Finish Signup ✅
+      </button>
+    </form>
+
+    <p class="text-center text-sm text-gray-500 mt-4">
+      <a href="/signup2/" class="hover:text-black">← Back</a>
+    </p>
+
+  </div>
+
+  <script>
+    const name = sessionStorage.getItem("name");
+    const email = sessionStorage.getItem("email");
+    const password = sessionStorage.getItem("password");
+
+    if (!name || !email || !password) {
+      alert("Session expired. Please signup again.");
+      window.location.href = "/signup1/";
+    }
+
+    document.getElementById("name").value = name;
+    document.getElementById("email").value = email;
+    document.getElementById("password").value = password;
+
+  // clear after submission
+  document.querySelector("form").addEventListener("submit", () => {
+    sessionStorage.clear();
+  });
+
+  </script>
+
+</body>
+</html>

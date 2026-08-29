@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer hover:text-emerald-400">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer hover:text-emerald-400">Profile</span>
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('manage-challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Manage Challenges
+      </li>
+
+      <li onclick="goTo('reports')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Reports
+      </li>
+
+      <li onclick="goTo('certificate')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Certificate
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">Admin Dashboard</h2>
+
+      <!-- STATS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">👤 Total Users</p>
+          <h3 id="totalUsers" class="text-2xl font-bold mt-2"></h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">🏋️ Trainers</p>
+          <h3 id="totalTrainers" class="text-2xl font-bold mt-2"></h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">📊 Challenges</p>
+          <h3 id="totalChallenges" class="text-2xl font-bold mt-2"></h3>
+        </div>
+
+      </div>
+
+      <!-- SYSTEM OVERVIEW -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <h3 class="font-semibold mb-4">System Overview</h3>
+
+        <ul class="text-gray-600 space-y-2">
+          <li>✔ Platform running smoothly</li>
+          <li>✔ Challenges synced across users & trainers</li>
+          <li>✔ Admin control active</li>
+        </ul>
+      </div>
+
+      <!-- TRAINER APPROVAL -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold mb-4">Trainer Approval Requests</h3>
+
+        <div id="trainerList" class="space-y-3"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+  <!-- SCRIPT -->
+<script>
+
+function goTo(page){
+  window.location.href = "/admin/" + page + "/";
+}
+
+async function loadDashboard(){
+
+  const response =
+    await fetch("/api/admin-stats/");
+
+  const data =
+    await response.json();
+
+  document.getElementById(
+    "totalUsers"
+  ).innerText = data.users;
+
+  document.getElementById(
+    "totalTrainers"
+  ).innerText = data.trainers;
+
+  document.getElementById(
+    "totalChallenges"
+  ).innerText = data.challenges;
+
+  // TRAINERS
+  const container =
+    document.getElementById("trainerList");
+
+  container.innerHTML = "";
+
+  if(data.pending_trainers.length === 0){
+
+    container.innerHTML = `
+      <p class="text-gray-500">
+        No pending trainer requests
+      </p>
+    `;
+
+    return;
+  }
+
+  data.pending_trainers.forEach(t => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "flex justify-between items-center bg-gray-100 p-3 rounded";
+
+    div.innerHTML = `
+      <span>${t.name}</span>
+
+      <div class="space-x-2">
+
+        <button
+        class="bg-green-500 text-white px-3 py-1 rounded text-sm">
+
+          Pending
+
+        </button>
+
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>

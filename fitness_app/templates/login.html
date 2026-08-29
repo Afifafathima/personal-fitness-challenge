@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center h-screen">
+
+  <div class="bg-white shadow-xl rounded-xl w-[400px] p-8">
+
+    <!-- LOGO -->
+    <div class="flex items-center gap-3 mb-6 justify-center">
+      <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+        <span class="text-white font-bold">💪</span>
+      </div>
+      <h1 class="text-lg font-semibold">FitChallenge</h1>
+    </div>
+
+    <h2 class="text-xl font-bold text-center mb-6">Welcome Back</h2>
+
+    <!-- 🔴 ERROR MESSAGE -->
+    {% if error %}
+      <p class="text-red-500 text-sm text-center mb-4">{{ error }}</p>
+    {% endif %}
+
+    <!-- ✅ LOGIN FORM -->
+    <form method="POST" action="/login-user/">
+      {% csrf_token %}
+
+      <div class="space-y-4">
+
+        <!-- EMAIL -->
+        <div>
+          <label class="text-sm font-medium">Email</label>
+          <input name="email" type="email" required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="relative">
+          <label class="text-sm font-medium">Password</label>
+
+          <input id="password" name="password" type="password" required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 pr-10">
+
+          <span onclick="togglePassword('password', this)"
+            class="absolute right-3 top-10 cursor-pointer text-gray-500">
+            <i></i>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- LOGIN BUTTON -->
+      <button type="submit"
+        class="w-full mt-6 bg-emerald-500 text-white py-3 rounded-lg hover:bg-emerald-600 transition">
+        Login
+      </button>
+
+    </form>
+
+    <!-- SIGNUP LINK -->
+    <div class="text-center mt-4 text-sm text-gray-500">
+      <p>
+        Don't have an account?
+        <a href="/signup1/" class="text-emerald-500 font-medium">Sign Up</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    window.onload = function () {
+      document.querySelectorAll("span i").forEach(icon => {
+        icon.innerHTML = feather.icons["eye-off"].toSvg();
+      });
+    };
+
+    function togglePassword(id, el) {
+      const input = document.getElementById(id);
+      const icon = el.querySelector("i");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.innerHTML = feather.icons["eye"].toSvg();
+      } else {
+        input.type = "password";
+        icon.innerHTML = feather.icons["eye-off"].toSvg();
+      }
+    }
+  </script>
+
+</body>
+</html>

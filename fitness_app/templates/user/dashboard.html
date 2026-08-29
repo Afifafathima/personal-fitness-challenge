@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+        💪
+      </div>
+
+      <h1 class="font-semibold text-sm md:text-base">
+
+        Personal Fitness Challenge Web Platform
+
+      </h1>
+
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+
+      <span onclick="goTo('help')"
+      class="cursor-pointer hover:text-emerald-400">
+
+        Help
+
+      </span>
+
+      <span onclick="goTo('profile')"
+      class="cursor-pointer hover:text-emerald-400">
+
+        Profile
+
+      </span>
+
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('challenges')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+
+        Challenges
+
+      </li>
+
+      <li onclick="goTo('trainers')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+
+        Trainers
+
+      </li>
+
+      <li onclick="goTo('calories')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+
+        Calories
+
+      </li>
+
+      <li onclick="goTo('leaderboard')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+
+        Leaderboard
+
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <!-- STATS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+
+        <!-- STREAK -->
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            🔥 Current Streak
+          </p>
+
+          <h3 id="streakValue"
+          class="text-2xl font-bold mt-2">
+
+            0 Days
+
+          </h3>
+
+        </div>
+
+        <!-- RANK -->
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            🏆 Rank
+          </p>
+
+          <h3 id="rankValue"
+          class="text-2xl font-bold mt-2">
+
+            #0
+
+          </h3>
+
+        </div>
+
+        <!-- LONGEST -->
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            ⭐ Longest Streak
+          </p>
+
+          <h3 id="longestValue"
+          class="text-2xl font-bold mt-2">
+
+            0 Days
+
+          </h3>
+
+        </div>
+
+        <!-- GOAL -->
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <p class="text-gray-500">
+            🎯 Goal
+          </p>
+
+          <h3 id="goalValue"
+          class="text-2xl font-bold mt-2">
+
+            Fitness
+
+          </h3>
+
+        </div>
+
+      </div>
+
+      <!-- GRAPHS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+        <!-- PROGRESS -->
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <h3 class="font-semibold mb-4">
+            Challenge Progress
+          </h3>
+
+          <canvas id="progressChart"></canvas>
+
+        </div>
+
+        <!-- WEIGHT -->
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <h3 class="font-semibold mb-4">
+            Weight Tracking
+          </h3>
+
+          <canvas id="weightChart"></canvas>
+
+        </div>
+
+      </div>
+
+      <!-- WEIGHT LOG -->
+<div class="bg-white p-6 rounded-xl shadow mb-6">
+
+  <h3 class="font-semibold mb-4">
+    ⚖️ Log Weight
+  </h3>
+
+  <div class="flex gap-4">
+
+    <input
+      id="weightInput"
+      type="number"
+      step="0.1"
+      placeholder="Enter weight in kg"
+      class="border p-2 rounded w-full"
+    >
+
+    <button
+      onclick="saveWeight()"
+      class="bg-emerald-500 text-white px-6 py-2 rounded"
+    >
+      Save
+    </button>
+
+  </div>
+
+</div>
+
+      <!-- CALORIES -->
+      <!-- CALORIES -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+
+        <div class="flex justify-between items-center mb-4">
+
+          <h3 class="font-semibold">
+            🔥 Calories Consumed
+          </h3>
+
+          <select
+            id="filter"
+            onchange="loadCalories()"
+            class="border p-2 rounded"
+          >
+
+            <option value="today">
+              Today
+            </option>
+
+            <option value="week">
+              Week
+            </option>
+
+            <option value="month">
+              Month
+            </option>
+
+          </select>
+
+        </div>
+
+        <p
+          id="caloriesValue"
+          class="text-2xl font-bold text-emerald-500"
+        >
+
+          0 kcal
+
+        </p>
+
+      </div>
+
+      <!-- JOINED CHALLENGES -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+
+        <h3 class="font-semibold mb-3">
+          Your Challenges
+        </h3>
+
+        <ul id="challengeList"
+        class="text-emerald-500 font-bold space-y-2">
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white w-full">
+
+    <div class="max-w-7xl mx-auto px-6 py-6 text-center text-gray-400 text-xs">
+
+      © 2026 Personal Fitness Challenge Web Platform
+
+    </div>
+
+  </footer>
+
+<script>
+
+function goTo(page){
+
+  window.location.href =
+    "/user/" + page + "/";
+}
+
+function getCookie(name){
+
+  let cookieValue = null;
+
+  if(document.cookie && document.cookie !== ''){
+
+    const cookies =
+      document.cookie.split(';');
+
+    for(let i = 0; i < cookies.length; i++){
+
+      const cookie =
+        cookies[i].trim();
+
+      if(
+        cookie.substring(
+          0,
+          name.length + 1
+        ) === (name + '=')
+      ){
+
+        cookieValue =
+          decodeURIComponent(
+            cookie.substring(
+              name.length + 1
+            )
+          );
+
+        break;
+      }
+    }
+  }
+
+  return cookieValue;
+}
+
+
+// REAL PROGRESS GRAPH
+async function loadProgressChart(){
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/user-progress/"
+      );
+
+    const data =
+      await response.json();
+
+    const labels =
+      data.map(item => item.name);
+
+    const progress =
+      data.map(item => item.progress);
+
+    // DESTROY OLD CHART
+    if(window.progressChartInstance){
+
+      window.progressChartInstance.destroy();
+    }
+
+    window.progressChartInstance =
+      new Chart(
+        document.getElementById(
+          "progressChart"
+        ),
+        {
+
+          type: "bar",
+
+          data: {
+
+            labels: labels,
+
+            datasets: [{
+
+              label: "Progress %",
+
+              data: progress,
+
+              borderWidth: 1
+            }]
+          },
+
+          options: {
+
+            responsive: true,
+
+            scales: {
+
+              y: {
+
+                min: 0,
+
+                max: 100,
+
+                ticks: {
+
+                  stepSize: 10
+                }
+              }
+            }
+          }
+        }
+      );
+
+  } catch(error){
+
+    console.log(error);
+  }
+}
+
+
+// REAL WEIGHT GRAPH
+async function loadWeightChart(){
+
+  const response =
+    await fetch(
+      "/api/weight-history/"
+    );
+
+  const data =
+    await response.json();
+
+  const labels =
+    data.map((item, index) =>
+      item.date + " #" + (index + 1)
+    );
+
+  const weights =
+    data.map(item => item.weight);
+
+  // DESTROY OLD CHART
+  if(window.weightChartInstance){
+
+    window.weightChartInstance.destroy();
+  }
+
+  window.weightChartInstance =
+    new Chart(
+      document.getElementById(
+        "weightChart"
+      ),
+      {
+
+        type: "line",
+
+        data: {
+
+          labels: labels,
+
+          datasets: [{
+
+            label: "Weight (kg)",
+
+            data: weights,
+
+            tension: 0.4,
+
+            fill: false,
+
+            borderWidth: 3
+          }]
+        },
+
+        options: {
+
+          responsive: true,
+
+          scales: {
+
+            y: {
+
+              min: 50,
+
+              max: 100,
+
+              ticks: {
+
+                stepSize: 10
+              }
+            }
+          }
+        }
+      }
+    );
+}
+
+// SAVE WEIGHT
+async function saveWeight(){
+
+  const weight =
+    document.getElementById(
+      "weightInput"
+    ).value;
+
+  if(!weight){
+
+    alert("Enter weight");
+
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "weight",
+    weight
+  );
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/add-weight/",
+        {
+
+          method: "POST",
+
+          headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+
+          body: formData
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(data.success){
+
+      alert("Weight saved ✅");
+
+      document.getElementById(
+        "weightInput"
+      ).value = "";
+
+      loadWeightChart();
+
+    } else {
+
+      alert(
+        data.error ||
+        "Failed to save"
+      );
+    }
+
+  } catch(error){
+
+    console.log(error);
+
+    alert("Server error");
+  }
+}
+
+// REALTIME CALORIES
+async function loadCalories(){
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/calorie-stats/"
+      );
+
+    const data =
+      await response.json();
+
+    const filter =
+      document.getElementById(
+        "filter"
+      ).value;
+
+    if(filter === "today"){
+
+      document.getElementById(
+        "caloriesValue"
+      ).innerText =
+        data.today + " kcal";
+    }
+
+    else if(filter === "week"){
+
+      document.getElementById(
+        "caloriesValue"
+      ).innerText =
+        data.week + " kcal";
+    }
+
+    else{
+
+      document.getElementById(
+        "caloriesValue"
+      ).innerText =
+        data.month + " kcal";
+    }
+
+  } catch(error){
+
+    console.log(error);
+  }
+}
+
+// REAL DASHBOARD
+async function loadDashboard(){
+
+  const response =
+    await fetch(
+      "/api/user-stats/"
+    );
+
+  const data =
+    await response.json();
+
+  if(data.error){
+    return;
+  }
+
+  // STATS
+  document.getElementById(
+    "streakValue"
+  ).innerText =
+    data.streak + " Days";
+
+  document.getElementById(
+    "rankValue"
+  ).innerText =
+    data.rank;
+
+  document.getElementById(
+    "longestValue"
+  ).innerText =
+    data.longest_streak + " Days";
+
+  document.getElementById(
+    "goalValue"
+  ).innerText =
+    data.goal;
+
+  // CHALLENGES
+  const list =
+    document.getElementById(
+      "challengeList"
+    );
+
+  list.innerHTML = "";
+
+  if(data.challenges.length === 0){
+
+    list.innerHTML = `
+      <li>
+        No challenges joined
+      </li>
+    `;
+
+    return;
+  }
+
+  data.challenges.forEach(ch => {
+
+    const li =
+      document.createElement("li");
+
+    li.innerText = ch;
+
+    list.appendChild(li);
+  });
+}
+
+// LOAD EVERYTHING
+loadDashboard();
+
+loadWeightChart();
+
+loadCalories();
+
+loadProgressChart();
+
+</script>
+
+</body>
+</html>

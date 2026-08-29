@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainer Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm md:text-base font-semibold">Personal Fitness Challenge Web Platform</h1>
+    </div>
+
+    <div class="flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer hover:text-emerald-400">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer hover:text-emerald-400">Profile</span>
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Challenges
+      </li>
+
+      <li onclick="goTo('create-challenge')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Create Challenge
+      </li>
+
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Leaderboard
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">Trainer Dashboard</h2>
+
+      <!-- STATS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">📊 Total Challenges</p>
+          <h3 id="totalChallenges" class="text-2xl font-bold mt-2"></h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">👥 Active Users</p>
+          <h3 class="text-2xl font-bold mt-2">120</h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <p class="text-gray-500">⭐ Rating</p>
+          <h3 class="text-2xl font-bold mt-2">4.8</h3>
+        </div>
+
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold mb-4">Recent Activity</h3>
+
+        <ul class="text-gray-600 space-y-2">
+          <li>✔ 10 users joined Abs Challenge</li>
+          <li>✔ New challenge created</li>
+          <li>✔ Profile updated</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white w-full">
+    <div class="text-center py-4 text-xs text-gray-400">
+      © 2026 Personal Fitness Challenge Web Platform
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    function goTo(page){
+      window.location.href = page + ".html";
+    }
+
+    // INITIALIZE DATA (only once)
+    if(!localStorage.getItem("allChallenges")){
+      localStorage.setItem("allChallenges", JSON.stringify([
+        {
+          id: 1,
+          name: "Abs Challenge",
+          days: "7 Days",
+          img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b"
+        },
+        {
+          id: 2,
+          name: "Full Body Workout",
+          days: "14 Days",
+          img: "https://images.unsplash.com/photo-1558611848-73f7eb4001a1"
+        }
+      ]));
+    }
+
+    // LOAD TOTAL CHALLENGES
+    const challenges = JSON.parse(localStorage.getItem("allChallenges")) || [];
+    document.getElementById("totalChallenges").innerText = challenges.length;
+
+  </script>
+
+</body>
+</html>

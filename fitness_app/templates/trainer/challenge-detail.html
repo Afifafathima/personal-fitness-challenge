@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trainer Challenge Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+<nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+      💪
+    </div>
+
+    <h1 class="font-semibold text-sm md:text-base">
+      Personal Fitness Challenge Web Platform
+    </h1>
+  </div>
+
+</nav>
+
+<div class="flex-1 p-6 mt-16">
+
+  <div class="bg-white rounded-xl shadow max-w-2xl mx-auto overflow-hidden">
+
+    <img id="img"
+    class="w-full h-60 object-cover">
+
+    <div class="p-6">
+
+      <h2 id="title"
+      class="text-2xl font-bold mb-2">
+      </h2>
+
+      <p id="days"
+      class="text-gray-500 mb-2">
+      </p>
+
+      <p id="category"
+      class="text-blue-500 mb-2">
+      </p>
+
+      <p id="joinedUsers"
+      class="text-emerald-500 mb-4">
+      </p>
+
+      <p id="desc"
+      class="text-gray-600 mb-6">
+      </p>
+
+      <div class="flex gap-4">
+
+        <button
+        onclick="goBack()"
+        class="bg-gray-700 text-white px-6 py-2 rounded">
+
+          Back
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function goBack(){
+  window.location.href =
+    "/trainer/challenges/";
+}
+
+const id =
+  new URLSearchParams(
+    window.location.search
+  ).get("id");
+
+async function loadChallenge(){
+
+  const response =
+    await fetch(`/api/challenge/${id}/`);
+
+  const data =
+    await response.json();
+
+  if(data.error){
+
+    document.getElementById(
+      "title"
+    ).innerText =
+      "Challenge not found";
+
+    return;
+  }
+
+  document.getElementById(
+    "title"
+  ).innerText =
+    data.name;
+
+  document.getElementById(
+    "days"
+  ).innerText =
+    data.days;
+
+  document.getElementById(
+    "img"
+  ).src =
+    data.image;
+
+  document.getElementById(
+    "category"
+  ).innerText =
+    "Category: " + data.category;
+
+  document.getElementById(
+    "joinedUsers"
+  ).innerText =
+    "Joined Users: " + data.joined_users;
+
+  document.getElementById(
+    "desc"
+  ).innerText =
+    data.description;
+}
+
+loadChallenge();
+
+</script>
+
+</body>
+</html>

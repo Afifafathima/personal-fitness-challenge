@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Personal Fitness Challenge Web Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 scroll-smooth">
+
+  <!-- HEADER -->
+  <header class="bg-gray-900 text-white px-8 py-4 flex items-center justify-between fixed w-full top-0 z-50">
+
+    <!-- LEFT: LOGO -->
+   <div class="flex items-center gap-3">
+
+  <!-- LOGO -->
+  <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+    <span class="text-white text-lg font-bold">💪</span>
+  </div>
+
+  <!-- TITLE -->
+  <h1 class="text-lg font-semibold">
+    Personal Fitness Challenge Web Platform
+  </h1>
+
+</div>
+
+    <!-- CENTER: NAV -->
+    <nav class="flex gap-8 absolute left-1/2 transform -translate-x-1/2">
+      <a href="#home" class="hover:text-emerald-400">Home</a>
+      <a href="#challenges" class="hover:text-emerald-400">Challenges</a>
+      <a href="#about" class="hover:text-emerald-400">About</a>
+    </nav>
+
+    <!-- RIGHT: AUTH -->
+    <div class="flex gap-4">
+      <a href="login.html" class="px-4 py-1 border border-gray-500 rounded hover:bg-gray-800">
+        Login
+      </a>
+      <a href="signup/signup1.html" class="px-4 py-1 bg-emerald-500 rounded hover:bg-emerald-600">
+        Sign Up
+      </a>
+    </div>
+
+  </header>
+
+  <!-- SPACING FOR FIXED NAVBAR -->
+  <div class="h-20"></div>
+
+  <!-- HERO SECTION -->
+  <section id="home" class="mx-10 mt-6 bg-white shadow rounded-xl p-10 flex justify-between items-center">
+
+    <div class="max-w-lg">
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">
+        Transform Your Fitness Journey 💪
+      </h2>
+
+      <p class="text-gray-600 mb-4">
+        Join structured fitness challenges, track your daily progress, and stay consistent with expert guidance.
+        Whether you're a beginner or advanced, we help you build discipline and achieve real results.
+      </p>
+
+      <a href="signup/signup1.html" class="bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600">
+        Get Started
+      </a>
+    </div>
+
+    <!-- IMAGE -->
+    <img 
+      src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74"
+      alt="fitness"
+      class="w-64 h-40 object-cover rounded-lg shadow"
+    >
+
+  </section>
+
+  <!-- CHALLENGES -->
+<section id="challenges" class="mx-10 mt-10">
+  <h3 class="text-xl font-semibold mb-6">Popular Challenges</h3>
+
+  <div class="grid grid-cols-5 gap-6">
+
+    <!-- CARD 1 -->
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">7-Day Fitness</p>
+      <p class="text-sm text-gray-500">7 Days</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1546483875-ad9014c88eba" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">Weight Loss</p>
+      <p class="text-sm text-gray-500">14 Days</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">Home Workout</p>
+      <p class="text-sm text-gray-500">10 Days</p>
+    </div>
+
+    <!-- CARD 4 (FIXED ABS IMAGE) -->
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">Abs Challenge</p>
+      <p class="text-sm text-gray-500">21 Days</p>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">Yoga Flexibility</p>
+      <p class="text-sm text-gray-500">15 Days</p>
+    </div>
+
+    <!-- EXTRA CARDS -->
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">Cardio Burn</p>
+      <p class="text-sm text-gray-500">12 Days</p>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
+      <img src="https://images.unsplash.com/photo-1517964603305-11c0f6f66012" class="h-24 w-full object-cover rounded mb-3">
+      <p class="font-medium">Strength Training</p>
+      <p class="text-sm text-gray-500">20 Days</p>
+    </div>
+
+  </div>
+
+  <!-- VIEW MORE BUTTON -->
+  <div class="text-center mt-8">
+    <a href="signup/signup1.html" class="bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600">
+      View More Challenges
+    </a>
+  </div>
+
+</section>
+
+  <!-- ABOUT -->
+  <section id="about" class="mx-10 mt-10 bg-white p-8 rounded-xl shadow">
+
+    <h3 class="text-lg font-semibold mb-3">About Us</h3>
+
+    <p class="text-gray-600 mb-4">
+      Personal Fitness Challenge Web Platform is designed to help individuals build healthy habits 
+      through structured fitness challenges. Our platform connects users with professional trainers, 
+      allowing them to follow guided programs, track daily progress, and stay motivated through 
+      leaderboards and achievements.
+    </p>
+
+    <p class="text-gray-600 mb-4">
+      We believe consistency is the key to transformation. With our system, users can participate in 
+      short-term and long-term challenges, monitor their calorie intake, and improve their overall lifestyle.
+    </p>
+
+    <p class="text-gray-600">
+      Whether your goal is weight loss, muscle gain, or simply staying active, this platform provides 
+      the right environment and support system to help you succeed.
+    </p>
+
+    <div class="mt-4 text-sm text-gray-500">
+      <p>Email: support@fitnessplatform.com</p>
+      <p>Phone: +91 XXXXX XXXXX</p>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-10 bg-gray-900 text-white text-center py-4">
+    <p class="text-sm">© 2026 Personal Fitness Challenge Web Platform</p>
+  </footer>
+
+</body>
+</html>

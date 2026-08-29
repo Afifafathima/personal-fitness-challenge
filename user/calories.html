@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calories</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">💪</div>
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="hidden md:flex gap-6 text-sm">
+      <span onclick="goTo('help')" class="cursor-pointer">Help</span>
+      <span onclick="goTo('profile')" class="cursor-pointer">Profile</span>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+    <ul class="space-y-3 text-sm">
+      <li onclick="goTo('dashboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Dashboard</li>
+      <li onclick="goTo('challenges')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Challenges</li>
+      <li onclick="goTo('trainers')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Trainers</li>
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">Calories</li>
+      <li onclick="goTo('leaderboard')" class="hover:bg-gray-700 p-2 rounded cursor-pointer">Leaderboard</li>
+    </ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl md:text-2xl font-bold">Calories Tracker</h2>
+
+        <button onclick="openModal()" 
+        class="bg-emerald-500 text-white px-4 py-2 rounded">
+          + Add Food
+        </button>
+      </div>
+
+      <!-- TOTAL -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <h3 class="font-semibold mb-3">Total Calories</h3>
+        <p id="total" class="text-2xl font-bold text-emerald-500">0 kcal</p>
+      </div>
+
+      <!-- LIST -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold mb-3">Today's Entries</h3>
+        <ul id="list" class="space-y-2 text-gray-600"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+
+    <div class="bg-white p-6 rounded-xl w-80">
+
+      <h3 class="font-semibold mb-4">Add Food</h3>
+
+      <input id="foodName" placeholder="Food name"
+        class="border p-2 w-full mb-3 rounded">
+
+      <input id="foodCalories" type="number" placeholder="Calories"
+        class="border p-2 w-full mb-4 rounded">
+
+      <div class="flex justify-between">
+        <button onclick="closeModal()" class="text-gray-500">Cancel</button>
+
+        <button onclick="addFood()" 
+        class="bg-emerald-500 text-white px-4 py-2 rounded">
+          Add
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+  <!-- SCRIPT -->
+<script>
+
+function goTo(page){
+
+  window.location.href =
+    "/user/" + page + "/";
+}
+
+function getCookie(name){
+
+  let cookieValue = null;
+
+  if(document.cookie && document.cookie !== ''){
+
+    const cookies =
+      document.cookie.split(';');
+
+    for(let i = 0; i < cookies.length; i++){
+
+      const cookie =
+        cookies[i].trim();
+
+      if(
+        cookie.substring(
+          0,
+          name.length + 1
+        ) === (name + '=')
+      ){
+
+        cookieValue =
+          decodeURIComponent(
+            cookie.substring(
+              name.length + 1
+            )
+          );
+
+        break;
+      }
+    }
+  }
+
+  return cookieValue;
+}
+
+// OPEN MODAL
+function openModal(){
+
+  document.getElementById(
+    "modal"
+  ).classList.remove(
+    "hidden"
+  );
+}
+
+// CLOSE MODAL
+function closeModal(){
+
+  document.getElementById(
+    "modal"
+  ).classList.add(
+    "hidden"
+  );
+}
+
+// ADD FOOD
+async function addFood(){
+
+  const name =
+    document.getElementById(
+      "foodName"
+    ).value;
+
+  const calories =
+    document.getElementById(
+      "foodCalories"
+    ).value;
+
+  if(!name || !calories){
+
+    alert(
+      "Enter valid data"
+    );
+
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append(
+    "food_name",
+    name
+  );
+
+  formData.append(
+    "calories",
+    calories
+  );
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/add-calories/",
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "X-CSRFToken":
+              getCookie(
+                "csrftoken"
+              )
+          },
+
+          body: formData
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(data.success){
+
+      document.getElementById(
+        "foodName"
+      ).value = "";
+
+      document.getElementById(
+        "foodCalories"
+      ).value = "";
+
+      closeModal();
+
+      loadCalories();
+
+    } else {
+
+      alert(
+        data.error ||
+        "Failed to add calories"
+      );
+    }
+
+  } catch(error){
+
+    console.log(error);
+
+    alert("Server error");
+  }
+}
+
+// LOAD CALORIES
+async function loadCalories(){
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/calorie-stats/"
+      );
+
+    const data =
+      await response.json();
+
+    // TOTAL TODAY
+    document.getElementById(
+      "total"
+    ).innerText =
+      data.today + " kcal";
+
+    // ENTRIES
+    const list =
+      document.getElementById(
+        "list"
+      );
+
+    list.innerHTML = "";
+
+    if(data.entries.length === 0){
+
+      list.innerHTML = `
+        <li class="text-gray-500">
+          No food entries today
+        </li>
+      `;
+
+      return;
+    }
+
+    data.entries.forEach(item => {
+
+      const li =
+        document.createElement(
+          "li"
+        );
+
+      li.innerText =
+        `${item.food} - ${item.calories} kcal`;
+
+      list.appendChild(li);
+    });
+
+  } catch(error){
+
+    console.log(error);
+
+    alert(
+      "Failed to load calories"
+    );
+  }
+}
+
+// INITIAL LOAD
+loadCalories();
+
+</script>
+
+</body>
+</html>

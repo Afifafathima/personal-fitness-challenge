@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Challenge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white px-6 py-3 flex justify-between items-center fixed top-0 w-full z-50">
+
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+        💪
+      </div>
+
+      <h1 class="text-sm md:text-base font-semibold">
+        Personal Fitness Challenge Web Platform
+      </h1>
+    </div>
+
+    <div class="flex gap-6 text-sm">
+
+      <span onclick="goTo('help')"
+      class="cursor-pointer hover:text-emerald-400">
+        Help
+      </span>
+
+      <span onclick="goTo('profile')"
+      class="cursor-pointer hover:text-emerald-400">
+        Profile
+      </span>
+
+    </div>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <div class="hidden md:flex flex-col w-52 bg-gray-800 text-white fixed top-14 left-0 h-[calc(100vh-56px)] p-4">
+
+    <ul class="space-y-3 text-sm">
+
+      <li onclick="goTo('dashboard')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Dashboard
+      </li>
+
+      <li onclick="goTo('challenges')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Challenges
+      </li>
+
+      <li class="bg-emerald-500 p-2 rounded cursor-pointer">
+        Create Challenge
+      </li>
+
+      <li onclick="goTo('leaderboard')"
+      class="hover:bg-gray-700 p-2 rounded cursor-pointer">
+        Leaderboard
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-1">
+
+    <div class="p-4 md:p-6 mt-16 md:ml-52">
+
+      <h2 class="text-xl md:text-2xl font-bold mb-6">
+        Create New Challenge
+      </h2>
+
+      <div class="bg-white p-6 rounded-xl shadow max-w-lg">
+
+        <!-- NAME -->
+        <div class="mb-4">
+
+          <label class="text-sm text-gray-500">
+            Challenge Name
+          </label>
+
+          <input
+          id="name"
+          class="w-full border p-2 rounded mt-1">
+
+        </div>
+
+        <!-- DAYS -->
+        <div class="mb-4">
+
+          <label class="text-sm text-gray-500">
+            Duration
+          </label>
+
+          <input
+          id="days"
+          placeholder="e.g. 7 Days"
+          class="w-full border p-2 rounded mt-1">
+
+        </div>
+
+        <!-- IMAGE -->
+        <div class="mb-4">
+
+          <label class="text-sm text-gray-500">
+            Image URL
+          </label>
+
+          <input
+          id="image"
+          placeholder="Paste image link"
+          class="w-full border p-2 rounded mt-1">
+
+        </div>
+
+        <!-- CATEGORY -->
+        <div class="mb-4">
+
+          <label class="text-sm text-gray-500">
+            Challenge Category
+          </label>
+
+          <select
+          id="category"
+          class="w-full border p-2 rounded mt-1">
+
+            <option value="Strength">
+              Strength
+            </option>
+
+            <option value="Cardio">
+              Cardio
+            </option>
+
+            <option value="Yoga">
+              Yoga
+            </option>
+
+            <option value="HIIT">
+              HIIT
+            </option>
+
+            <option value="Weight Loss">
+              Weight Loss
+            </option>
+
+          </select>
+
+        </div>
+
+        <!-- BUTTON -->
+        <button
+        onclick="createChallenge()"
+        class="bg-emerald-500 text-white px-6 py-2 rounded">
+
+          Create Challenge
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white text-center py-4 text-xs">
+    © 2026 Personal Fitness Challenge Web Platform
+  </footer>
+
+<script>
+
+function goTo(page){
+  window.location.href =
+    "/trainer/" + page + "/";
+}
+
+async function createChallenge(){
+
+  const name =
+    document.getElementById("name").value;
+
+  const days =
+    document.getElementById("days").value;
+
+  const image =
+    document.getElementById("image").value;
+
+  const category =
+    document.getElementById("category").value;
+
+  if(!name || !days || !image){
+
+    alert("Fill all fields");
+
+    return;
+  }
+
+  const formData =
+    new FormData();
+
+  formData.append("name", name);
+  formData.append("days", days);
+  formData.append("image", image);
+  formData.append("category", category);
+
+  const response =
+    await fetch("/api/create-challenge/", {
+
+      method: "POST",
+
+      body: formData,
+
+      headers: {
+        "X-CSRFToken":
+        getCookie("csrftoken")
+      }
+    });
+
+  const data =
+    await response.json();
+
+  if(data.error){
+
+    alert(data.error);
+
+    return;
+  }
+
+  alert("Challenge created successfully");
+
+  window.location.href =
+    "/trainer/challenges/";
+}
+
+// CSRF
+function getCookie(name){
+
+  let cookieValue = null;
+
+  if(document.cookie &&
+    document.cookie !== ''){
+
+    const cookies =
+      document.cookie.split(';');
+
+    for(let i = 0;
+      i < cookies.length;
+      i++){
+
+      const cookie =
+        cookies[i].trim();
+
+      if(cookie.substring(
+        0,
+        name.length + 1
+      ) === (name + '=')){
+
+        cookieValue =
+          decodeURIComponent(
+            cookie.substring(
+              name.length + 1
+            )
+          );
+
+        break;
+      }
+    }
+  }
+
+  return cookieValue;
+}
+
+</script>
+
+</body>
+</html>
