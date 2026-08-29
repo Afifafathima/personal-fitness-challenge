@@ -6,6 +6,33 @@ A full-stack web application that helps users participate in fitness challenges,
 
 [Open the deployed application](https://personal-fitness-challenge.onrender.com/)
 
+## Demo Credentials
+
+The deployed application includes demo accounts for exploring the different roles.
+
+### Admin
+Email: `demo-admin@example.com`
+Password: `your-demo-password`
+
+### Trainer
+Email: `demo-trainer@example.com`
+Password: `your-demo-password`
+
+### User
+Email: `demo-user@example.com`
+Password: `your-demo-password`
+
+> These accounts are provided only for demonstration purposes.
+
+Admin
+  └── approved Demo Trainer
+
+Demo Trainer
+  └── has created challenges
+
+Demo User
+  └── can see and join those challenges
+
 ## Overview
 
 The Personal Fitness Challenge Web Platform was developed to provide a centralized platform for users, fitness trainers, and administrators.
