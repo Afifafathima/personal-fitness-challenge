@@ -11,16 +11,16 @@ A full-stack web application that helps users participate in fitness challenges,
 The deployed application includes demo accounts for exploring the different roles.
 
 ### Admin
-Email: `demo-admin@example.com`
-Password: `your-demo-password`
+Email: `admin@gmail.com`
+Password: `admin123`
 
 ### Trainer
-Email: `demo-trainer@example.com`
-Password: `your-demo-password`
+Email: `trainer1@gmail.com`
+Password: `trainer1`
 
 ### User
-Email: `demo-user@example.com`
-Password: `your-demo-password`
+Email: `user1@gmail.com`
+Password: `1234567`
 
 > These accounts are provided only for demonstration purposes.
 
